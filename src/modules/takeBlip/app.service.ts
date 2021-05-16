@@ -32,7 +32,6 @@ export class AppService {
           return {
             title: repo.full_name,
             subtitle: repo.description,
-            url: repo.html_url,
           };
         });
 

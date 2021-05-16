@@ -10,5 +10,4 @@ export class QueryResponseDto {
 export class RepositoryDto {
   title: string;
   subtitle: string;
-  url: string;
 }
