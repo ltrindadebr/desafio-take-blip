@@ -2,7 +2,7 @@ import { Injectable, HttpService, BadRequestException } from '@nestjs/common';
 
 import * as qs from 'qs';
 import { QueryParamsDto } from './dtos/queryParams.dto';
-import { QueryResponseDto } from './dtos/queryResponse.dto';
+import { QueryResponseDto, RepositoryDto } from './dtos/queryResponse.dto';
 
 @Injectable()
 export class AppService {
@@ -19,7 +19,7 @@ export class AppService {
     };
   }
 
-  async getApiInfos(): Promise<QueryResponseDto[]> {
+  async getApiInfos(): Promise<QueryResponseDto> {
     try {
       const { language, per_page, sort, direction } = this.query;
 
@@ -27,16 +27,24 @@ export class AppService {
       const url = `${this.githubUrl}/repos?${queryString}`;
       const { data } = await this.httpService.get<any>(url).toPromise();
 
-      const detailedRepos: QueryResponseDto[] = data.map((repo) => {
-        return {
-          title: repo.full_name,
-          subtitle: repo.description,
-          image: repo.owner.avatar_url,
-          url: repo.html_url,
-        };
-      });
+      if (data.length > 0) {
+        const repositories: RepositoryDto[] = data.map((repo) => {
+          return {
+            title: repo.full_name,
+            subtitle: repo.description,
+            url: repo.html_url,
+          };
+        });
 
-      return detailedRepos;
+        return {
+          carroselImage: data[0].owner.avatar_url,
+          firstRepository: repositories[0],
+          secondRepository: repositories[1],
+          thirdRepository: repositories[2],
+          fourthRepository: repositories[3],
+          fifthRepository: repositories[4],
+        };
+      }
     } catch (error) {
       throw new BadRequestException(error.message);
     }

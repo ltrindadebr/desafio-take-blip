@@ -7,7 +7,7 @@ export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Get()
-  async getApiInfos(): Promise<QueryResponseDto[]> {
+  async getApiInfos(): Promise<QueryResponseDto> {
     return this.appService.getApiInfos();
   }
 }
